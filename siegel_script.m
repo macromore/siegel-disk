@@ -1,8 +1,9 @@
 % Seigel Disk approximation
 % Clean up MatLab
 clear, close all, hold on
+tic
 % Order of approximation
-N = 500;
+N = 100000;
 % Scaling of preimage
 r = 1;
 % Number of concentric circles
@@ -10,9 +11,10 @@ K = 1;
 % Number of points to plot on each circle
 numPoints = 2000;
 % Paramerter
-a = 0;%exp(1i*sqrt(2)*pi);
+a = exp(1i*(1+sqrt(5))/2);
+%P1 value%exp(1i*sqrt(2)*pi);
 % P1 value
-P1 = .321;
+P1 = .3;
 fprintf('P1 value = %f\n', P1)
 % Storage vector for P
 P = zeros(N+1,1);
@@ -34,6 +36,7 @@ for k = 1:K
    end
    plot(Pz)
 end
+toc
 % Compute the norm of the image under the operator
 normF = norm(fcnPhi(P, a),2);
 fprintf('Norm of defect: %d\n', normF)
