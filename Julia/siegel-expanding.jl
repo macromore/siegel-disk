@@ -5,11 +5,11 @@ include("evaluateTaylor.jl")
 include("fcnPhi.jl")
 ## Set up parameters
 # Order of Approximation
-N = 2_500
+N = 10_000
 # Scaling of preimage
 r = 1
 # Number of points to plot
-numPoints = 1_000
+numPoints = 2_000
 # Rotation parameters
 a = exp(im*(1+sqrt(5))/2)
 # Number of iterations
@@ -17,14 +17,14 @@ maxIter = 250
 # Max Error or Tail Size
 tolerance = 1e-10
 # Minimum ste size for h_1 as 10^-maxPower
-maxPower = 15
+maxPower = 16
 # Maximum s in sobolev H^s Norm
 maxSobolev = 10
 ## Set up output file
 # Todo
 ## Set up loop variables
 # Storage vector for coeffients
-P = zeros(ComplexF64,N+1,maxIter)
+P = zeros(ComplexF64,N+1,maxIter+1)
 # Storage for output points 
 Pz = zeros(ComplexF64,numPoints+1,1)
 # Iteration counter
@@ -60,9 +60,10 @@ for j in range(2,maxPower)
             println("Attempt ", i, " successful.")
             println("    Norm of last coeffieint: ", mag)
             println("    Norm of defect: ", normF)
-            display(plot!(real(Pz[:]),imag(Pz[:]),legend=false,title="Siegel Disk Boundary Approximation"))
+            plot!(real(Pz),imag(Pz))
         end
     end
 end
+display(plot!(real(Pz),imag(Pz),legend=false,title="Siegel Disk Boundary Approximation"))
 end
 end

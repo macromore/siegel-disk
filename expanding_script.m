@@ -3,7 +3,7 @@
 clear, close all, hold on
 %% Set up parameters
 % Order of approximation
-N = 2500;
+N = 5000;
 % Scaling of preimage 
 r = 1;
 % Number of points to plot on each circle
@@ -17,7 +17,7 @@ maxIter = 250;
 % Maximum error or norm of last coeff for next iteration
 tolerance = 1e-10;
 % Minimum step size for h_1 expressed as 10^-maxPower
-maxPower = 15;
+maxPower = 16;
 % Maximum s in sobolev H^s norm
 maxSobolev = 10;
 %% Record results for posterity
