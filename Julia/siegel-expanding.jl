@@ -26,7 +26,7 @@ maxSobolev = 10
 # Storage vector for coeffients
 P = zeros(ComplexF64,N+1,maxIter)
 # Storage for output points 
-Pz = zeros(ComplexF64,numPoints+1,maxIter)
+Pz = zeros(ComplexF64,numPoints+1,1)
 # Iteration counter
 let i = 0
 # Starting h_1 value
@@ -35,7 +35,7 @@ h_1 = 0.1
 # Todo
 ## Main computation
 @time begin
-for j in 2:maxPower
+for j in range(2,maxPower)
     println("Step size: ", 10.0^-j)
     while i <= maxIter
         i += 1
@@ -51,17 +51,16 @@ for j in 2:maxPower
         if normF > tolerance || mag > tolerance
             println("Attempt ", i, " failed.")
             P[:,i] = zeros(ComplexF64,N+1,1)
-            Pz[:,i] = zeros(ComplexF64,numPoints+1,1)
             h_1 -= 10.0^-j
             break
         else
             for n in range(1,numPoints+1)
-                Pz[n,i] = evaluateTaylor(P[:,i],(r)*exp(2*pi*im*n/numPoints))
+                Pz[n] = evaluateTaylor(P[:,i],(r)*exp(2*pi*im*n/numPoints))
             end
             println("Attempt ", i, " successful.")
             println("    Norm of last coeffieint: ", mag)
             println("    Norm of defect: ", normF)
-            display(plot!(real(Pz[:,i]),imag(Pz[:,i]),legend=false,title="Siegel Disk Boundary Approximation"))
+            display(plot!(real(Pz[:]),imag(Pz[:]),legend=false,title="Siegel Disk Boundary Approximation"))
         end
     end
 end
