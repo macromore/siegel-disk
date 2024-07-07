@@ -6,7 +6,7 @@ xMin = -1.5
 xMax = 1.5
 yMin = -2
 yMax = 1
-step = 0.001
+step = 0.01
 xNum = length(xMin:step:xMax)
 yNum = length(yMin:step:yMax)
 juliaColor = ones(xNum,yNum)
@@ -32,4 +32,5 @@ for j in xMin:step:xMax
 end
 #contourf(juliaColor)
 contour(log.(juliaColor),fill=true)
+# plot!(yticks=yMin:step:yMax, xticks=xMin:step:yMax)
 end
