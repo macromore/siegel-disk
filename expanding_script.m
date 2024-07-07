@@ -38,7 +38,6 @@ Pz = zeros(numPoints+1,maxIter);
 iter = 0;
 % Starting h_1 value
 h_1 = 0.1;
-maxPower = 15;
 % Record keeping
 successes = [];
 errorValues = [];
@@ -49,6 +48,7 @@ figSuccesses = figure(1);
 set(figSuccesses, 'Units', 'Normalized', 'OuterPosition', [.05 .4 .3 .5]);
 title('Siegel Disks')
 %% Main Computation Section
+tic
 for j = 2:maxPower % j will control the attempted step size
     fprintf('Step size %g.\n',(10^(-j)))
     while iter <= maxIter % Repeatedly try larger h_1 values
@@ -63,11 +63,6 @@ for j = 2:maxPower % j will control the attempted step size
         end % for loop
         % Look at the last coeff magnitude
         mag = abs(P(end,iter));
-        % Compute the image of concentric circles under P
-        for m = 1:numPoints+1
-            Pz(m,iter) = ...
-                evaluate_taylor(P(:,iter),(r)*exp(2*pi*1i*m/numPoints));
-        end % for loop
         % Compute the norm of the image under the operator phi
         normF = norm(fcnPhi(P(:,iter), a),2);
         if normF > tolerance || mag > tolerance % Backtrack on failure
@@ -79,6 +74,11 @@ for j = 2:maxPower % j will control the attempted step size
             h_1 = h_1 - (10^(-j));
             break % Exit the while loop and decreas step size
         else % Report success and plot
+            % Compute the image of concentric circles under P
+            for m = 1:numPoints+1
+                Pz(m,iter) = ...
+                    evaluate_taylor(P(:,iter),(r)*exp(2*pi*1i*m/numPoints));
+            end % for loop
             fprintf('Attempt %d successful. \n',iter)
             successes(length(successes)+1) = iter; %#ok<SAGROW>
             h_1Values(length(successes)) = h_1; %#ok<SAGROW>
@@ -91,6 +91,7 @@ for j = 2:maxPower % j will control the attempted step size
         end % if
     end % while loop
 end % for loop
+toc
 %% Report end of computation information. 
 figError = figure(2);
 set(figError, 'Units', 'Normalized', 'OuterPosition', [.4 .2 .5 .7]);
