@@ -26,14 +26,6 @@ for j in xMin:step:xMax
                 break
             end
         end
-        # if p_iter == maxIter
-        #     juliaColor[x,y] = 1 + offSet
-        # end
-        # if y == 1 && x == 1 && p_iter > 0
-        #     offSet = p_iter - 1
-        # elseif y == 1 && x == 1
-        #     offSet = 0
-        # end
         y += 1
     end
     x += 1
