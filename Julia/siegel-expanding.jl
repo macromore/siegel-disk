@@ -1,23 +1,23 @@
 ## Dependencies
-using Plots, Quadmath, DSP
+using Plots, Quadmath, DSP, LinearAlgebra
 include("coefficient.jl")
 include("evaluateTaylor.jl")
 include("fcnPhi.jl")
 ## Set up parameters
 # Order of Approximation
-N = 10_000
+N = 100_000
 # Scaling of preimage
 r = 1
 # Number of points to plot
-numPoints = 2_000
+numPoints = 1_000
 # Rotation parameters
 a = exp(im*(1+sqrt(5))/2)
 # Number of iterations
-maxIter = 250
+maxIter = 500
 # Max Error or Tail Size
 tolerance = 1e-10
 # Minimum ste size for h_1 as 10^-maxPower
-maxPower = 16
+maxPower = 18
 # Maximum s in sobolev H^s Norm
 maxSobolev = 10
 ## Set up output file
@@ -36,10 +36,10 @@ h_1 = 0.1
 ## Main computation
 @time begin
 for j in range(2,maxPower)
-    println("Step size: ", 10.0^-j)
+    println("Step size: ", 10.0^(-j))
     while i <= maxIter
         i += 1
-        h_1 += 10.0^-j
+        h_1 += 10.0^(-j)
         println("h_1 value: ", h_1)
         P[1,i] = 0
         P[2,i] = h_1
@@ -47,11 +47,12 @@ for j in range(2,maxPower)
             P[k+1,i] = coeffient(k,P[:,i],a)
         end
         mag = abs(P[end,i])
-        normF = sqrt(sum(broadcast(abs,fcnPhi(P[:,i],a)).^2))
+        normF = norm(fcnPhi(P[:,i],a))
+        #normF = sqrt(sum(broadcast(abs,fcnPhi(P[:,i],a)).^2))
         if normF > tolerance || mag > tolerance
             println("Attempt ", i, " failed.")
             P[:,i] = zeros(ComplexF64,N+1,1)
-            h_1 -= 10.0^-j
+            h_1 -= 10.0^(-j)
             break
         else
             for n in range(1,numPoints+1)
@@ -64,6 +65,6 @@ for j in range(2,maxPower)
         end
     end
 end
-display(plot!(real(Pz),imag(Pz),legend=false,title="Siegel Disk Boundary Approximation"))
+display(plot!(real(Pz),imag(Pz),legend=false,title="Siegel Disk Boundary Approximation"),p)
 end
 end

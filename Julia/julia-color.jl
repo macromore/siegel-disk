@@ -32,5 +32,5 @@ for j in xMin:step:xMax
 end
 #contourf(juliaColor)
 contour(log.(juliaColor),fill=true)
-# plot!(yticks=yMin:step:yMax, xticks=xMin:step:yMax)
+# plot!(yticks=yMin:.5:yMax, xticks=xMin:.5:yMax)
 end
